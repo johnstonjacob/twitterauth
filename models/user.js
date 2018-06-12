@@ -8,20 +8,21 @@ UserSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model('User', UserSchema);
 
-User.findOrCreate = function(info) {
+User.findOrCreate = function(info, cb) {
   console.log(info);
   User.findOne({ username: info.twitterId }, (err, user) => {
-    if (err) return console.error(err);
+    if (err) return cb(err, null);
     if (!user) {
       user = new User({
-        username: user.twitterId,
+        username: info.twitterId,
       });
       user.save((err) => {
         if (err) console.error(err);
-        else return user;
+        else cb(null, user);
       });
     } else {
-      return user;
+	console.log(user)
+      return cb(null, user);
     }
   });
 };

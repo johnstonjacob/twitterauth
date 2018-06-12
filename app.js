@@ -38,8 +38,10 @@ passport.use(
       callbackURL: 'http://206.189.170.211/auth/twitter/callback',
     },
     (token, tokenSecret, profile, cb) => {
-      User.findOrCreate({ twitterId: profile.id }, (err, user) => cb(err, user));
-    }
+      User.findOrCreate({ twitterId: profile.id }, (err, user) => {
+	    console.log('-----------')  
+	      return cb(null, user);
+    })}
   )
 );
 passport.serializeUser(User.serializeUser());
@@ -95,12 +97,15 @@ app.get('/auth/twitter', passport.authenticate('twitter'));
 
 app.get(
   '/auth/twitter/callback',
-  passport.authenticate('twitter', { failureRedirect: '/login', successRedirect: '/secret' }),
-  (req, res) => {}
+  passport.authenticate('twitter', { successRedirect: '/secret', failureRedirect: '/login', }),
+  (req, res) => {
+	res.redirect('/secret') 
+  }
 );
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
+	  console.log('hi')
     return next();
   }
   res.redirect('/');
