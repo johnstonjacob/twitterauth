@@ -80,6 +80,6 @@ function isLoggedIn(req, res, next) {
   res.redirect('/');
 }
 
-app.listen(3000, 'localhost', () => {
+app.listen(8080, 'localhost', () => {
   console.log('Server Started');
 });
