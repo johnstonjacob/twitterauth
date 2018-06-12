@@ -95,11 +95,8 @@ app.get('/auth/twitter', passport.authenticate('twitter'));
 
 app.get(
   '/auth/twitter/callback',
-  passport.authenticate('twitter', { failureRedirect: '/login' }),
-  (req, res) => {
-    console.log('this did stuff');
-    res.redirect('/secret');
-  }
+  passport.authenticate('twitter', { failureRedirect: '/login', successRedirect: '/secret' }),
+  (req, res) => {}
 );
 
 function isLoggedIn(req, res, next) {
