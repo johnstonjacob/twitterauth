@@ -1,5 +1,6 @@
-const mongoose = require('mongoose'),
-  passportLocalMongoose = require('passport-local-mongoose');
+const mongoose = require('mongoose')
+const  passportLocalMongoose = require('passport-local-mongoose');
+
 const UserSchema = new mongoose.Schema({
   username: String,
   passowrd: String,
@@ -8,22 +9,20 @@ UserSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model('User', UserSchema);
 
-User.findOrCreate = function(info, cb) {
-  console.log(info);
+User.findOrCreate = function findCreate(info, cb) {
   User.findOne({ username: info.twitterId }, (err, user) => {
     if (err) return cb(err, null);
     if (!user) {
-      user = new User({
+     const newUser = new User({
         username: info.twitterId,
       });
-      user.save((err) => {
-        if (err) console.error(err);
-        else cb(null, user);
+     return user.save((error) => {
+        if (err) return cb(error, null) 
+        return cb(null, newUser);
       });
-    } else {
-	console.log(user)
+    } 
       return cb(null, user);
-    }
+    
   });
 };
 
